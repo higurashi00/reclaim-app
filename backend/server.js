@@ -12,7 +12,7 @@ app.use(express.text({ type: "text/plain", limit: "50mb" })); // To parse the ur
 // Route to generate SDK configuration for the frontend
 app.get("/reclaim/generate-config", async (req, res) => {
   const APP_ID = process.env.REACT_APP_ID;
-  const APP_SECRET = process.env.REAVT_APP_SECRET;
+  const APP_SECRET = process.env.REACT_APP_SECRET;
   const PROVIDER_ID = process.env.REACT_APP_PROVIDER_ID;
 
   try {
