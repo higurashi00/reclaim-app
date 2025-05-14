@@ -1,16 +1,20 @@
-/* App.css - 黒基調のラグジュアリーなデザイン */
-
 :root {
-  --primary-bg: #121212;
-  --secondary-bg: #1e1e1e;
-  --accent-color: #d4af37; /* ゴールド */
-  --text-primary: #ffffff;
-  --text-secondary: #b3b3b3;
-  --success-color: #4caf50;
-  --error-color: #f44336;
+  --primary-bg: #ffffff; /* 白背景 */
+  --secondary-bg: #f0f8ff; /* 薄い青緑がかった白、またはアクセント背景 */
+  --accent-color: #008080; /* 濃い青緑 (Teal) */
+  --accent-hover-color: #006666; /* 濃い青緑のホバー */
+  --text-primary: #333333; /* 濃いグレーのテキスト */
+  --text-secondary: #555555; /* やや薄いグレーのテキスト */
+  --success-color: #28a745; /* 緑 (成功) */
+  --error-color: #dc3545; /* 赤 (エラー) */
+  --disabled-color: #cccccc; /* グレーアウト時の色 */
+  --border-color: #e0e0e0; /* ボーダーの色 */
   --border-radius: 8px;
-  --box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
+  --inactive-bg-color: #e9ecef; /* 非アクティブ時の背景色 */
+  --inactive-text-color: #6c757d; /* 非アクティブ時のテキスト色 */
+  --inactive-border-color: #dee2e6; /* 非アクティブ時のボーダー色 */
 }
 
 * {
@@ -20,7 +24,7 @@
 }
 
 body {
-  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+  font-family: 'Arial', 'Helvetica Neue', sans-serif;
   background-color: var(--primary-bg);
   color: var(--text-primary);
   line-height: 1.6;
@@ -30,23 +34,23 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px;
 }
 
 .app-header {
-  padding: 40px 0;
+  padding: 30px 0;
   text-align: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 40px; /* Stepコンテナとの間隔を広げる */
 }
 
 .app-header h1 {
-  font-size: 2.5rem;
-  font-weight: 300;
-  letter-spacing: 2px;
-  color: var(--text-primary);
-  margin-bottom: 10px;
+  font-size: 2.2rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--accent-color);
 }
 
 .app-main {
@@ -54,53 +58,104 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 60px 0;
+  padding: 0; /* app-main自体のpaddingは0に */
 }
 
-.qr-code-container {
+.step-container {
   background-color: var(--secondary-bg);
-  padding: 40px;
+  padding: 30px;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
-  text-align: center;
-  margin-bottom: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 40px; /* Stepコンテナ間のマージンを広げる */
+  width: 100%;
+  border: 1px solid var(--border-color);
   transition: var(--transition);
 }
 
-.qr-code-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+.step-container.inactive {
+  background-color: var(--inactive-bg-color);
+  opacity: 0.65; /* 少し透明度を調整 */
+  pointer-events: none; /* クリックイベントを無効化 */
+  border-color: var(--inactive-border-color);
+}
+
+.step-container.inactive * {
+    pointer-events: none; /* 子要素もクリック不可に */
+}
+
+.step-container.inactive h2 {
+  color: var(--inactive-text-color);
+}
+
+.step-container.inactive p,
+.step-container.inactive label {
+  color: #9098a0; /* inactive時のテキストをさらに薄く */
+}
+
+.step-container.inactive button,
+.step-container.inactive input[type="text"] {
+  background-color: #f8f9fa !important;
+  color: var(--inactive-text-color) !important;
+  border-color: var(--inactive-border-color) !important;
+  cursor: not-allowed !important;
+  opacity: 0.8;
+}
+
+.step-container.inactive .qr-code-container svg {
+    opacity: 0.5;
+}
+
+.step-container h2 {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sdk-init-message {
+  background-color: #e6f3f3;
+  color: var(--accent-color);
+  padding: 12px 18px;
+  border-radius: var(--border-radius);
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 500;
+  border: 1px solid #cce0e0;
+}
+
+.qr-code-container {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .qr-code-container p {
-  margin-bottom: 20px;
-  font-size: 1.2rem;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
   color: var(--text-secondary);
 }
 
 .qr-code-container svg {
-  padding: 15px;
+  padding: 10px;
   background-color: white;
   border-radius: 4px;
+  border: 1px solid var(--border-color);
 }
 
 .status-container {
-  margin-top: 30px;
-  padding: 20px 40px;
-  background-color: var(--secondary-bg);
+  margin-top: 30px; /* Stepコンテナとの間隔を確保 */
+  padding: 15px 20px;
+  background-color: var(--primary-bg);
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
   text-align: center;
-  min-width: 300px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  width: 100%;
 }
 
 .status-message {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 500;
-  padding: 10px 0;
 }
 
 .status-message.success {
@@ -115,71 +170,108 @@ body {
   color: var(--accent-color);
 }
 
+.status-message.info { /* App.jsで追加したinfoクラス用 */
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.form-group { /* App.jsのform内のdivに適用 */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.form-container label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.form-container input[type="text"] {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.form-container input[type="text"]:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.2rem rgba(0,128,128,.25);
+  outline: none;
+}
+
 button {
   background-color: var(--accent-color);
-  color: var(--primary-bg);
+  color: white;
   border: none;
-  padding: 12px 24px;
+  padding: 12px 20px;
   font-size: 1rem;
   font-weight: 600;
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: var(--transition);
-  margin-top: 20px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  margin-top: 10px;
 }
 
 button:hover {
-  background-color: #e5c667;
-  transform: translateY(-2px);
+  background-color: var(--accent-hover-color);
+  transform: translateY(-1px);
 }
 
 button:disabled {
-  background-color: #6b6b6b;
+  background-color: var(--disabled-color);
+  color: #6c757d;
   cursor: not-allowed;
   transform: none;
 }
 
 .app-footer {
-  padding: 20px 0;
+  padding: 30px 0;
   text-align: center;
   font-size: 0.9rem;
   color: var(--text-secondary);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
+  margin-top: 40px;
 }
 
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
   .app-header h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
-  
-  .qr-code-container {
-    padding: 30px;
+  .step-container {
+    padding: 20px;
+    margin-bottom: 30px;
   }
-  
   .qr-code-container svg {
-    width: 200px !important;
-    height: 200px !important;
+    width: 180px !important;
+    height: 180px !important;
   }
 }
 
 @media (max-width: 480px) {
   .app-header h1 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
-  
-  .qr-code-container {
-    padding: 20px;
-  }
-  
-  .qr-code-container svg {
-    width: 180px !important;
-    height: 180px !important;
-  }
-  
-  .status-container {
+  .step-container {
     padding: 15px;
+    margin-bottom: 25px;
+  }
+  .qr-code-container svg {
+    width: 150px !important;
+    height: 150px !important;
+  }
+  button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
   }
 }
+

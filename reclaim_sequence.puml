@@ -1,0 +1,48 @@
+@startuml
+title Reclaim Protocol - Webデータ取得から検証までのプロセス
+
+actor "ユーザー" as User
+participant "アプリケーション" as App
+participant "Reclaimクライアント" as ReclaimClient
+participant "ターゲットウェブサイト" as TargetWebsite
+participant "アテスター\n(証人サーバー)" as Attestor
+participant "検証者" as Verifier
+
+== 初期化フェーズ ==
+
+User -> App: 1. ユーザーログイン
+App -> ReclaimClient: 2. セッション作成\n(APP_ID, APP_SECRET, PROVIDER_ID)
+ReclaimClient -> App: 3. リクエストURL生成
+App -> User: リクエストURLを表示
+
+== データ取得・プルーフ生成フェーズ ==
+
+User -> TargetWebsite: 4. リクエストURLにアクセス\nターゲットサイトにログイン
+TargetWebsite -> User: データ提供
+User <-> ReclaimClient: TLSトラフィック捕捉
+ReclaimClient -> ReclaimClient: TLSトラフィックから\n暗号化証明を生成
+ReclaimClient -> Attestor: 暗号化証明を送信
+Attestor -> Attestor: 証明を検証
+Attestor -> ReclaimClient: 署名付きプルーフを返送
+ReclaimClient -> User: 5. プルーフ生成完了
+
+== 検証フェーズ ==
+
+User -> App: 6. プルーフ提出
+App -> App: 7. プルーフ検証
+note right of App
+  verifySignedProof()を使用して
+  プルーフの真正性と完全性を検証
+end note
+App -> User: 検証結果を表示
+
+== オプション: ブロックチェーン連携 ==
+
+App -> App: プルーフをオンチェーン形式に変換
+note right of App
+  transformForOnchain()を使用
+end note
+App -> Verifier: オンチェーンプルーフを送信
+Verifier -> Verifier: オンチェーンでプルーフを検証
+
+@enduml
